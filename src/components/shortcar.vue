@@ -1,19 +1,9 @@
-<template>
+<template slot-scope="scope">
   <div id="app">
     <form action="#"  v-show="isShow">
-  <h1>新增商品</h1>
-      <div>
-          <label>品牌名称:</label>
-          <input type="text" v-model="brand"/>
-        </div>
-        <div>
-          <label>创立时间:</label>
-          <input type="text" v-model="time"/>
-        </div>
-        <div>
-          <button @click="add">确定提交</button>
-        </div>
+ 
     </form>
+   
     <button class="btn" @click="onshow">新增</button>
     <table class="tb">
       <tr >
@@ -21,19 +11,37 @@
         <th>品牌名称</th>
         <th>创立时间</th>
         <th>操作</th>
+        <th>操作</th>
       </tr>
-      <tr v-for="(item,index) in list" :key="index">
-        <td>{{index}}</td>
+      <tr v-for="(item,index) in list" :key="index" >
+        <td>{{index+1}}</td>
         <td>{{item.name}}</td>
         <td>{{item.time}}</td>
         <td>
           <button @click="remove(index)">删除</button>
         </td>
+        <td>
+          <button @click="change(index)">修改</button>
+        </td>
       </tr>
       <tr>
-        <td colspan="4" v-if="this.list.length === 0">没有数据咯~</td>
+        <td colspan="5" v-if="this.list.length === 0">没有数据咯~</td>
       </tr>
     </table>
+    <div>
+    <h1>新增商品</h1>
+      <label>品牌名称:</label>
+          <input type="text" v-model="brand"/>
+        </div>
+        <div>
+          <label>创立时间:</label>
+          <input type="text" v-model="time"/>
+        </div>
+        <div>
+          <button @click.prevent="add">确定提交</button>
+          <button @click.prevent="succesee(index)">确定修改</button>
+
+        </div>
   </div>
 </template>
 
@@ -44,13 +52,11 @@ export default {
        
     return {
       isShow:true,
-      list: [
-        { id: 1, name: "奔驰", time: "2020-08-01" }
-      ],
+      list: [],
       brand:'',
       time:'',
-      id:''
-      
+      id:'',
+      index:''
     };
   },
   methods:{
@@ -58,10 +64,19 @@ export default {
       this.isShow = !this.isShow
     },
     add(){
-      this.list.push({id:this.index,name:this.brand,time:this.time})
+      this.list.push({id:this.list.length+1,name:this.brand,time:this.time})
     },
     remove(){
       this.list.splice(this.index,1)
+    },
+    change(index){
+     console.log(this.list[index]);
+     this.brand=this.list[index].name
+     this.time=this.list[index].time
+     this.id= index
+    },
+    succesee(){
+      this.list.splice(this.id,1,{id:this.id,name:this.brand , time:this.time})
     }
   }
 };
