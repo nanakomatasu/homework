@@ -1,16 +1,19 @@
 <template>
- <shortcarVue />
+ <studentsVue />
+ <!-- <navVue /> -->
 </template>
 
 <script>
-import shortcarVue from './shortcar.vue';
+// import navVue from './nav.vue';
+import studentsVue from './students.vue';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
   components:{
-    shortcarVue
+    studentsVue,
+    // navVue
   }
 }
 </script>
