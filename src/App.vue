@@ -1,131 +1,92 @@
 <template>
   <div>
-    <table border="1" width="700" style="border-collapse: collapse">
-      <caption>
-        购物车
-      </caption>
+    <input placeholder="输入关键字搜索">
+    <table class="my-table">
       <thead>
         <tr>
-          <th><input type="checkbox" v-model="isAll" /> <span>全选</span></th>
-          <th>名称</th>
-          <th>价格</th>
-          <th>数量</th>
-          <th>总价</th>
+          <th>就诊日期</th>
+          <th>医生姓名</th>
+          <th>诊断结果</th>
+          <th>处方信息</th>
           <th>操作</th>
         </tr>
       </thead>
+      <listVue :list='list' :index="index"/>
       <tbody>
-        <listVue
-          v-for="item in goodList"
-          :key="item.id"
-          :name="item.name"
-          :price="item.price"
-          :num="item.num"
-          :checked="item.checked"
-          @add="add"
-          @jian="jian"
-          @check="check"
-          @del="del"
-        />
+        <tr v-for="item in list" :key="item.id">
+          <td>{{ item.date }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.over }}</td>
+          <td>{{ item.drug }}</td>
+          <td  @click="openmodel(item.id)">详情</td>
+        </tr>
       </tbody>
-      <sum :sum="sum"/>
     </table>
   </div>
 </template>
 
 <script>
-import sum from './components/sum.vue'
-import listVue from "./components/shopcarlist.vue";
-export default {
-  data() {
-    return {
-      goodList: [
-        {
-          name: "诸葛亮",
-          price: 1000,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "蔡文姬",
-          price: 1500,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "妲己",
-          price: 2000,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "鲁班",
-          price: 2200,
-          num: 1,
-          checked: false,
-        },
-      ],
-    };
-  },
-  components: {
-    listVue
-    ,sum
-  },
-  computed: {
-    sum(){
-     return this.goodList.reduce((i,sum)=>{
-        return i=i+ sum.num*sum.price
-      },0)
+import listVue from './components/详情.vue'
+export default{
+    components: {
+      listVue
     },
-    isAll: {
-      get() {
-        return this.goodList.every((i) => {
-          return i.checked == true;
-        });
-      },
-      set(v) {
-        // console.log(v);
-       this.goodList.forEach((i) => {
-          i.checked = v;
-        });
-      },
-    },
-  },
-  methods:{
-    add(v,name){
-        this.goodList.forEach(i=>{
-           if(i.name==name){
-            i.num=i.num+v
-
-           }
-        })
-    },
-    del(){
-  this.goodList.splice(this.inex,1)
-    },
-    jian(name){
-      this.goodList.forEach(i=>{
-           if(i.name==name){
-          i.num==0 ? i.num=0 : i.num=i.num-1
-           }}
-      )},
-      check(v,name){
-       
-        this.goodList.forEach(i=>{
-           if(i.name==name){
-         i.checked= v
-         
-           }}
-         
-      )
-     
+    data(){
+      return {
+        list: [
+          {
+            id: 1,
+            date: '2022-01-01',
+            name: '张三',
+            over: '发烧',
+            drug: '感冒药',
+          },
+          {
+            id: 2,
+            date: '2022-02-01',
+            name: '张4',
+            over: '发烧了',
+            drug: '感冒药',
+          },
+          {
+            id: 3,
+            date: '2022-03-01',
+            name: '张5',
+            over: '真发烧了',
+            drug: '感冒药',
+          },
+          {
+            id: 4,
+            date: '2022-04-01',
+            name: '张6',
+            over: '真的发烧了',
+            drug: '感冒药',
+          },
+        ],
+        index:''
       }
-  }
-};
+    },
+    methods:{
+      openmodel(id){
+    this.index =id
+      }
+    }
+}
 </script>
 
-<style>
-tr {
-  text-align: center;
-}
+<style scoped>
+  .my-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .my-table td, .my-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .my-table th {
+    background-color: #f2f2f2;
+  }
 </style>
