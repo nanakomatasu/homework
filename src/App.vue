@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input placeholder="输入关键字搜索">
+    <input placeholder="输入关键字搜索" v-model="uname">
     <table class="my-table">
       <thead>
         <tr>
@@ -11,14 +11,14 @@
           <th>操作</th>
         </tr>
       </thead>
-      <listVue :list='list' :index="index"/>
+      <listVue  :index="id"/>
       <tbody>
-        <tr v-for="item in list" :key="item.id">
+        <tr v-for="(item,index) in newList" :key="item.id">
           <td>{{ item.date }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.over }}</td>
           <td>{{ item.drug }}</td>
-          <td  @click="openmodel(item.id)">详情</td>
+          <td  @click="openmodel(index)">详情</td>
         </tr>
       </tbody>
     </table>
@@ -63,13 +63,28 @@ export default{
             drug: '感冒药',
           },
         ],
-        index:''
+        id:'',
+        flag:false,
+        uname:'',
       }
     },
     methods:{
-      openmodel(id){
-    this.index =id
+      openmodel(index){
+    this.id = index
+    this.flag=true
       }
+    },
+    watch:{
+  
+    },
+    computed:{
+      newList(){
+      if(this.uname){
+        return this.list.filter(ele=>this.uname === ele.name)
+      }else{
+        return this.list
+      }
+    }
     }
 }
 </script>

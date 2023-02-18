@@ -1,15 +1,15 @@
 <template>
-  <div class="modal-mask" v-show="flag">
+  <div class="modal-mask" v-show="this.$parent.flag">
     <div class="modal-container">
       <div class="modal-header">
         <h3>就诊记录详情</h3>
         <span class="close-btn" @click="closeta">X</span>
       </div >
       <div class="modal-body" >
-        <p><strong>就诊日期：</strong>章三</p>
-        <p><strong>医生姓名：</strong>李四</p>
-        <p><strong>诊断结果：</strong>健康</p>
-        <p><strong>处方信息：</strong>无</p>
+        <p><strong>就诊日期：</strong>{{ this.$parent.list[index].date }}</p>
+        <p><strong>医生姓名：</strong>{{ this.$parent.list[index].name }}</p>
+        <p><strong>诊断结果：</strong>{{ this.$parent.list[index].over }}</p>
+        <p><strong>处方信息：</strong>{{ this.$parent.list[index].drug }}</p>
       </div>
     </div>
   </div>
@@ -19,22 +19,18 @@
   export default {
     name:'listVue',
     props:{
-      list:{
-        type: Array,
-      },
-      index:{
-        type:[Number,String]
-      }
+          index:{
+            type : [Number,String]
+          }
     },
     data(){
       return {
-        flag : false
       }
     },
     methods:{
-        closeta(){
-        this.flag=true
-      },
+      closeta(){
+        this.$parent.flag= false
+      }
     },
      
     }
