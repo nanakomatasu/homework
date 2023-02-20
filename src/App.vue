@@ -1,34 +1,139 @@
 <template>
   <div>
-    <Mytag :tag.sync="tag"></Mytag>
-    <MyTable :list="goods">
-      <template #head>
-        <th>编号</th>
-        <th>图片</th>
-        <th>名称</th>
-        <th width="100px">标签</th>
-      </template></MyTable>
+    <div>
+      <label for="orderNo" >订单号：</label>
+      <input id="orderNo" v-model="valueinfo"/>
+      <button @click="oninput">查询</button>
+    </div>
+    <div class="logistics-info">
+   <Myadress ref="myadress"></Myadress>
+   <mydetials ref="mydetials"></mydetials>
+    </div>
   </div>
 </template>
 
 <script>
-import Mytag from './components/MyTag.vue'
-import MyTable from './components/MyTable.vue';
+import Myadress from './components/ListVue';
+import mydetials from './components/MyDe.vue';
 export default {
-  name: 'VueBaseApp',
-  components: {
-    Mytag,
-    MyTable
+  components:{
+    Myadress,
+    mydetials
   },
-  data() {
-    return {
-      goods:[
-          { id: 101, picture: 'https://yanxuan-item.nosdn.127.net/f8c37ffa41ab1eb84bff499e1f6acfc7.jpg', name: '梨皮朱泥三绝清代小品壶经典款紫砂壶', tag: '茶具' },
-  { id: 102, picture: 'https://yanxuan-item.nosdn.127.net/221317c85274a188174352474b859d7b.jpg', name: '全防水HABU旋钮牛皮户外徒步鞋山宁泰抗菌', tag: '男鞋' },
-  { id: 103, picture: 'https://yanxuan-item.nosdn.127.net/cd4b840751ef4f7505c85004f0bebcb5.png', name: '毛茸茸小熊出没，儿童羊羔绒背心73-90cm', tag: '儿童服饰' },
-  { id: 104, picture: 'https://yanxuan-item.nosdn.127.net/56eb25a38d7a630e76a608a9360eec6b.jpg', name: '基础百搭，儿童套头针织毛衣1-9岁', tag: '儿童服饰' },
-      ]
-    };
+data () {
+  return {
+    orderInfo :{
+  orderNo: this.currentOrderNo,
+  role: 'admin', // 角色 ==> 用于判断是否有查看用户详情的权限
+  logisticsStatus: 0, // 0 未发货 1 已发货 2 已签收 3 未签收
+  logisticsCompany: '顺丰速运', // 快递公司的名称
+  logisticsNo: 'SF123456789', // 快件运单号
+  logisticsInfo: [
+    {
+      time: '2023-02-01 10:00:00', // 时间
+      content: '快件已发货' // 快递状态
+    },
+    {
+      time: '2023-02-02 09:00:00',
+      content: '快件到达深圳中心'
+    },
+    {
+      time: '2023-02-03 08:00:00',
+      content: '快件派送中'
+    },
+    {
+      time: '2023-02-04 16:00:00',
+      content: '已签收'
+    }
+  ],
+  goodInfo: { // 商品信息
+    goodNo: '12345678912312', // 商品id
+    goodName: '三体',// 商品名称
+    type: 0, // 0 代表的是文本 1代表的是 图片
+    // desc 描述 ==> 可以是图片 也可以是其他的东西。数据可以随便改
+    desc: '	http://registakeaway.itheima.net/common/download?name=9b978122-179a-4b0e-891b-595d0cd3d875.jpg'
   }
-};
+},
+flag:false,
+valueinfo:''
+  }},
+methods:{
+  oninput(){
+    this.$nextTick(setTimeout(() => {
+      if (this.valueinfo !== '') {
+        this.flag = true
+      }
+    }, 3000))
+    if(this.orderInfo.logisticsStatus === 0){
+      this.orderInfo.logisticsInfo=this.orderInfo.logisticsInfo.slice(0,1)
+    }else if(this.orderInfo.logisticsStatus === 1){
+      this.orderInfo.logisticsInfo=this.orderInfo.logisticsInfo.slice(0,2)
+    }else if(this.orderInfo.logisticsStatus === 2){
+      this.orderInfo.logisticsInfo=this.orderInfo.logisticsInfo.slice(0,3)
+    }else{
+      this.orderInfo.logisticsInfo=this.orderInfo.logisticsInfo.slice(0,4)
+    }
+  },
+}}
+
 </script>
+<style >
+  .logistics-info {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #eee;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .logistics-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .logistics-info-header-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .logistics-status {
+    font-weight: bold;
+    font-size: 16px;
+    color: #007bff;
+  }
+
+  .logistics-company,
+  .logistics-no {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .logistics-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 230px;
+    overflow-y: auto;
+  }
+
+  .logistics-info-list li {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .logistics-info-list-time {
+    font-size: 12px;
+    color: #999;
+    width: 80px;
+    text-align: right;
+    margin-right: 10px;
+  }
+
+  .logistics-info-list-content {
+    font-size: 14px;
+    color: #333;
+  }
+</style>
