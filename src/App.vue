@@ -1,131 +1,34 @@
 <template>
   <div>
-    <table border="1" width="700" style="border-collapse: collapse">
-      <caption>
-        购物车
-      </caption>
-      <thead>
-        <tr>
-          <th><input type="checkbox" v-model="isAll" /> <span>全选</span></th>
-          <th>名称</th>
-          <th>价格</th>
-          <th>数量</th>
-          <th>总价</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <listVue
-          v-for="item in goodList"
-          :key="item.id"
-          :name="item.name"
-          :price="item.price"
-          :num="item.num"
-          :checked="item.checked"
-          @add="add"
-          @jian="jian"
-          @check="check"
-          @del="del"
-        />
-      </tbody>
-      <sum :sum="sum"/>
-    </table>
+    <Mytag :tag.sync="tag"></Mytag>
+    <MyTable :list="goods">
+      <template #head>
+        <th>编号</th>
+        <th>图片</th>
+        <th>名称</th>
+        <th width="100px">标签</th>
+      </template></MyTable>
   </div>
 </template>
 
 <script>
-import sum from './components/sum.vue'
-import listVue from "./components/shopcarlist.vue";
+import Mytag from './components/MyTag.vue'
+import MyTable from './components/MyTable.vue';
 export default {
+  name: 'VueBaseApp',
+  components: {
+    Mytag,
+    MyTable
+  },
   data() {
     return {
-      goodList: [
-        {
-          name: "诸葛亮",
-          price: 1000,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "蔡文姬",
-          price: 1500,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "妲己",
-          price: 2000,
-          num: 1,
-          checked: false,
-        },
-        {
-          name: "鲁班",
-          price: 2200,
-          num: 1,
-          checked: false,
-        },
-      ],
+      goods:[
+          { id: 101, picture: 'https://yanxuan-item.nosdn.127.net/f8c37ffa41ab1eb84bff499e1f6acfc7.jpg', name: '梨皮朱泥三绝清代小品壶经典款紫砂壶', tag: '茶具' },
+  { id: 102, picture: 'https://yanxuan-item.nosdn.127.net/221317c85274a188174352474b859d7b.jpg', name: '全防水HABU旋钮牛皮户外徒步鞋山宁泰抗菌', tag: '男鞋' },
+  { id: 103, picture: 'https://yanxuan-item.nosdn.127.net/cd4b840751ef4f7505c85004f0bebcb5.png', name: '毛茸茸小熊出没，儿童羊羔绒背心73-90cm', tag: '儿童服饰' },
+  { id: 104, picture: 'https://yanxuan-item.nosdn.127.net/56eb25a38d7a630e76a608a9360eec6b.jpg', name: '基础百搭，儿童套头针织毛衣1-9岁', tag: '儿童服饰' },
+      ]
     };
-  },
-  components: {
-    listVue
-    ,sum
-  },
-  computed: {
-    sum(){
-     return this.goodList.reduce((i,sum)=>{
-        return i=i+ sum.num*sum.price
-      },0)
-    },
-    isAll: {
-      get() {
-        return this.goodList.every((i) => {
-          return i.checked == true;
-        });
-      },
-      set(v) {
-        // console.log(v);
-       this.goodList.forEach((i) => {
-          i.checked = v;
-        });
-      },
-    },
-  },
-  methods:{
-    add(v,name){
-        this.goodList.forEach(i=>{
-           if(i.name==name){
-            i.num=i.num+v
-
-           }
-        })
-    },
-    del(){
-  this.goodList.splice(this.inex,1)
-    },
-    jian(name){
-      this.goodList.forEach(i=>{
-           if(i.name==name){
-          i.num==0 ? i.num=0 : i.num=i.num-1
-           }}
-      )},
-      check(v,name){
-       
-        this.goodList.forEach(i=>{
-           if(i.name==name){
-         i.checked= v
-         
-           }}
-         
-      )
-     
-      }
   }
 };
 </script>
-
-<style>
-tr {
-  text-align: center;
-}
-</style>
