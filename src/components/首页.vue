@@ -1,10 +1,12 @@
 <template>
-<router-view ></router-view>
+    <div>
+首页
+    </div>
 </template>
 
 <script>
-
 export default {
+  name:'ShouYe',
     props: {
 
     },
@@ -34,6 +36,6 @@ export default {
 };
 </script>
 
-<style scoped lang="">
+<style scoped lang="scss">
 
 </style>
